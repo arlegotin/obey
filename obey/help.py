@@ -8,6 +8,20 @@ from .const import HELP_OPTIONS
 CALLED_SCRIPT_NAME = basename(sys.argv[0])
 
 
+def format_table(rows: list[list[str]]) -> str:
+    """
+    Converts rows of strings into printable table.
+    Also Removes empty columns.
+    """
+    columns = zip(*rows)
+
+    filled_columns = [any(c) for c in columns]
+
+    rows = [[x for i, x in enumerate(row) if filled_columns[i]] for row in rows]
+
+    return tabulate(rows, tablefmt="plain")
+
+
 def help_called() -> bool:
     """
     Returns true when user calls help menu
@@ -19,7 +33,7 @@ def combine_lines_to_string(help_lines: list[str]) -> str:
     """
     Combines lines of help into final text
     """
-    return "\n" + "\n".join(help_lines) + "\n"
+    return "\n".join(help_lines) + "\n"
 
 
 def compose_collection_help(collection: Collection) -> str:
@@ -59,7 +73,7 @@ def compose_collection_help(collection: Collection) -> str:
         help_lines += collection.doc_lines
 
     # Arguments
-    argument_parts = []
+    argument_parts: list[list[str]] = []
     for arg in positionals:
         line_parts = [
             collection.format_arg_name(arg),
@@ -73,10 +87,10 @@ def compose_collection_help(collection: Collection) -> str:
         argument_parts.append(line_parts)
 
     if argument_parts:
-        help_lines += ["", "Arguments:"] + [tabulate(argument_parts, tablefmt="plain")]
+        help_lines += ["", "Arguments:"] + [format_table(argument_parts)]
 
     # Options
-    option_parts = []
+    option_parts: list[list[str]] = []
     for arg in options:
         line_parts = [
             *collection.get_option_names(arg),
@@ -91,11 +105,11 @@ def compose_collection_help(collection: Collection) -> str:
 
     if HELP_OPTIONS:
         option_parts.append(
-            [*HELP_OPTIONS, "", "", "print out help message and exit"],
+            [*HELP_OPTIONS, "", "", "Show this message and exit"],
         )
 
     if option_parts:
-        help_lines += ["", "Options:"] + [tabulate(option_parts, tablefmt="plain")]
+        help_lines += ["", "Options:"] + [format_table(option_parts)]
 
     return combine_lines_to_string(help_lines)
 

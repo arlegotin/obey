@@ -1,9 +1,8 @@
-from obey import command
-from typing import Optional
+from obey import command, Option
 
 
 @command
-def hello(name: Optional[str], count: Optional[int] = 1):
+def hello(name: Option[str], count: Option[int] = 1):
     """
     Prints out greeting for given name given number of times
     """

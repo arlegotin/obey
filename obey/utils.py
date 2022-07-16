@@ -1,5 +1,6 @@
 from typing import Any, Literal, Union, get_origin, get_args
 from re import compile, match, IGNORECASE
+from .types.option import Option
 
 PRIMITIVE_TYPES = [str, int, float, complex, bool]
 
@@ -86,6 +87,8 @@ def decompose_optional(given_type: Any) -> tuple[Any, bool]:
 
     x -> x, False
     Optional[x] -> x, True
+
+    Works with typing.Optional and obey.types.Option
     """
     if get_origin(given_type) is Union:
         parts_of_union = get_args(given_type)
@@ -93,6 +96,13 @@ def decompose_optional(given_type: Any) -> tuple[Any, bool]:
         if len(parts_of_union) == 2:
             type_behind, presumably_none = parts_of_union
             if type_behind != type(None) and presumably_none == type(None):
+                return type_behind, True
+
+    if isinstance(given_type, tuple):
+        if len(given_type) == 2:
+            type_behind, type_name = given_type
+
+            if type_name == Option.TYPE:
                 return type_behind, True
 
     return given_type, False
