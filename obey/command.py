@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import Callable, Optional
 import atexit
 import sys
+import inspect
 
 from .collection import Collection
 from .parser import Parser
@@ -80,6 +81,15 @@ class Command:
             self.collections.append(Collection())
 
         return self.collections[-1]
+
+    @property
+    def called_from_top(self) -> bool:
+        """
+        Returns true if parent function is being called from a top-level script
+        """
+        frm = inspect.stack()[2]
+        mod = inspect.getmodule(frm[0])
+        return mod.__name__ == "__main__"
 
     def __call__(self, fn: Callable) -> Callable:
         self.current_collection.add_fn(fn)

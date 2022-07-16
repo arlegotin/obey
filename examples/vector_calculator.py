@@ -1,7 +1,6 @@
 """
 This module performs operations on vectors
 """
-
 from obey import command
 from typing import Optional, Literal
 from math import sqrt

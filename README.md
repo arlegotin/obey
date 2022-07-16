@@ -57,7 +57,7 @@ Intrigued? So let's dive in.
      - Literal
      - List
      - Tuple
-   - Returned values
+   - Returned value
 2. Firing
 3. Command branching
    - One level
@@ -444,7 +444,7 @@ Argument "values" of "min" is required
 If the absence of values is the expected behavior, we can handle it by providing a default value:
 ```python
 @command
-def sum(values: list[float] = []):
+def sum_numbers(values: list[float] = []):
     if not list:
         print("Sum is zero")
 
@@ -497,4 +497,96 @@ Argument "b" of "cross_product" got 2 values, but expects 3
 
 python cross_product.py 1 2 3 4 5 6 7
 Unexpected positional "7"
+```
+
+Currently Obey does not support tuples with different types. Argument type `tuple[float, string]` will raise an exception.
+
+### Returned value
+So far, all commands that we saw displayed the result using `print`. Which is not always a good idea: those functions are hard to test.
+
+It would be nice if our commands could be testable, while CLI user could see the result on the screen.
+
+That's why Obey takes a function execution result, validates it according to the function returning type and prints it out:
+
+```python
+@command
+def sum_numbers(values: list[float] = []) -> float:
+    if not list:
+        return 0
+
+    return sum(values)
+```
+
+For CLI user our command works as expected:
+```console
+python sum.py 1 2 3
+6.0
+```
+While developer can import this function to test it:
+```python
+# tests/test_sum.py
+from my_package import sum_numbers
+
+def test_sum_numbers():
+    assert sum_numbers([1, 2, 3]) == 6
+```
+
+## Firing
+
+As you probably already noticed, Obey executes commands without checking `__name__ == '__main__'` or so. This is bacause Obey tries to determine when to run the command and when not.
+
+For most cases this is the most natural and handy behavior. And of course, this behavior can be changed.
+
+Let's see how it works and how we can control it.
+
+Assume we have a file `app.py` containing a single command:
+
+```python
+# app.py
+from obey import command
+
+@command
+def do_it(task: str) -> str:
+    return f"I'm doing {task}"
+```
+
+When we execute `app.py` Obey will automatically call function `do_it`:
+
+```console
+python app.py well
+I'm doing well
+```
+
+But what if in some cases we'd like to reuse `do_it`? Let's make an extension for our app:
+```python
+# extended_app.py
+from .app import do_it
+from obey import command
+
+@command
+def do_it_multiple(task: str, count: int = 1) -> str:
+    return ", ".join([do_it(task) for _ in range(count)])
+        
+```
+And call it:
+```console
+python extended_app.py "my part" 3
+I'm doing my part, I'm doing my part, I'm doing my part
+```
+
+As we can see, Obey ignored command `do_it` from `app.py` and called only `do_it_multiple` from `extended_app.py`.
+
+It's also possible to reuse decorated command in other parts of our application, which are not intended for CLI. For example in tests:
+
+```python
+# tests/test_all.py
+
+from my_package.app import do_it
+from my_package.extended_app import do_it_multiple
+
+def test_do_it():
+    assert do_it("fine!") == "I'm doing fine!"
+
+def do_it_multiple():
+    assert do_it_multiple("my job", 2) == "I'm doing my job, I'm doing my job"
 ```
