@@ -30,7 +30,7 @@ class Argument:
         if default == PLACEHOLDER_FOR_DEFAUL_VALUE:
             default = None
 
-        if self.original_type is bool and self.is_option and default is None:
+        if self.original_type is bool and self.is_option:
             default = False
 
         self.default = default

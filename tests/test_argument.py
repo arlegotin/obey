@@ -21,7 +21,6 @@ def test_primitives():
         (int, 1, 2),
         (float, 2.718, 3.14),
         (complex, complex("3+4j"), complex("5-2j")),
-        (bool, True, False),
     ]:
         for with_default in [False, True]:
             for is_option in [False, True]:
@@ -69,6 +68,61 @@ def test_primitives():
                 assert not arg.can_be_filled
                 assert arg.value == some_other_value
                 arg.validate_value()
+
+def test_bool():
+    func_name = "some_func"
+    arg_name = "some_arg"
+
+    for with_default in [False, True]:
+        for is_option in [False, True]:
+
+            if with_default:
+                if is_option:
+                    arg = Argument(func_name, arg_name, Optional[bool], True)
+                    assert arg.has_default
+                    assert arg.value == False
+                else:
+                    arg = Argument(func_name, arg_name, bool, True)
+                    assert arg.has_default
+                    assert arg.value == True
+                
+                arg.validate_value()
+            else:
+                if is_option:
+                    arg = Argument(func_name, arg_name, Optional[bool])
+                    assert arg.has_default
+                    assert arg.value == False
+                    arg.validate_value()
+                else:
+                    arg = Argument(func_name, arg_name, bool)
+                    assert not arg.has_default
+                    assert arg.value is None
+
+                    with pytest.raises(Exception):
+                        arg.validate_value()
+
+            assert arg.fn_name == func_name
+            assert arg.original_name == arg_name
+
+            assert arg.original_type == bool
+            assert arg.args_in_type == ()
+
+            assert arg.is_option is is_option
+
+            assert arg.underlying_type == bool
+            assert arg.is_bool == True
+            assert not arg.is_list
+            assert not arg.is_literal
+            assert not arg.is_tuple
+
+            assert arg.expected_values_count == 1
+            assert not arg.expects_many_values
+            assert arg.can_be_filled
+
+            arg.fill_value(True)
+            assert not arg.can_be_filled
+            assert arg.value == True
+            arg.validate_value()
 
 
 def test_list():
