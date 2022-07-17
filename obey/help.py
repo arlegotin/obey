@@ -10,7 +10,7 @@ CALLED_SCRIPT_NAME = basename(sys.argv[0])
 
 
 def format_arg_name(arg: Parameter) -> str:
-    return f"<{arg.original_name}>"
+    return f"<{arg.name}>"
 
 
 def format_table(rows: list[list[str]]) -> str:

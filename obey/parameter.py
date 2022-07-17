@@ -6,31 +6,32 @@ from .utils import (
     decompose_optional,
     type_is_valid,
     get_underlying_types,
-    name_is_valid,
+    arg_name_is_valid,
 )
-from .const import NO_DEFAUL_VALUE
+from .const import NO_VALUE
 
 
 class Parameter:
     def __init__(
-        self, fn_name: str, name: str, its_type: Any, default: Any = NO_DEFAUL_VALUE
+        self, fn_name: str, name: str, its_type: Any, default: Any = NO_VALUE
     ):
-        if not name_is_valid(name):
+        if not arg_name_is_valid(name):
             raise NameError(f'invalid argument name "{name}" of "{fn_name}"')
 
-        self.fn_name = fn_name
-        self.original_name = name
+        self.fn_name: str = fn_name
+        self.name: str = name
 
         if not type_is_valid(its_type):
             raise ParameterError(self, f'has invalid type "{its_type}"')
 
-        self.original_type, self.is_option = decompose_optional(its_type)
-        self.underlying_type = get_underlying_types(its_type)[0]
+        self.original_type: Any = its_type
+        self.is_option: bool = default != NO_VALUE
+        self.underlying_type: Any = get_underlying_types(its_type)[0]
 
         if self.original_type is bool and self.is_option:
             default = False
 
-        self.default = default
+        self.default: Any = default
         self.filled_value: Any = None
 
     def cast(self, value: Any) -> Any:
@@ -77,7 +78,7 @@ class Parameter:
             self.filled_value = self.cast(value)
 
     def validate_value(self) -> None:
-        if not self.has_default and self.value is NO_DEFAUL_VALUE: 
+        if not self.has_default and self.value is NO_VALUE:
             raise ParameterError(self, "is required")
 
         if 1 < self.expected_values_count < inf:
@@ -95,7 +96,7 @@ class Parameter:
         if self.has_default:
             return self.default
 
-        return NO_DEFAUL_VALUE
+        return NO_VALUE
 
     def __repr__(self) -> str:
         parts = []
@@ -106,9 +107,9 @@ class Parameter:
         parts.append("positional" if not self.is_option else "option")
 
         if self.has_default:
-            parts.append(f"{self.original_name}:{self.type_description}={self.default}")
+            parts.append(f"{self.name}:{self.type_description}={self.default}")
         else:
-            parts.append(f"{self.original_name}:{self.type_description}")
+            parts.append(f"{self.name}:{self.type_description}")
 
         if self.expects_many_values:
             if self.expected_values_count == inf:
@@ -144,7 +145,7 @@ class Parameter:
 
     @cached_property
     def has_default(self) -> bool:
-        return self.default is not NO_DEFAUL_VALUE
+        return self.default is not NO_VALUE
 
     @cached_property
     def type_description(self) -> str:
@@ -191,5 +192,5 @@ class Parameter:
 
 class ParameterError(Exception):
     def __init__(self, arg: Parameter, message: str):
-        prefix = f'{"option" if arg.is_option else "argument"} "{arg.original_name}" of "{arg.fn_name}"'
+        prefix = f'{"option" if arg.is_option else "argument"} "{arg.name}" of "{arg.fn_name}"'
         super().__init__(f"{prefix} {message}")

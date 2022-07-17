@@ -16,9 +16,7 @@ class UnexpectedPositional(Exception):
 
 class MissingParameter(Exception):
     def __init__(self, parameter: Parameter):
-        super().__init__(
-            f'missing {"option" if parameter.is_option else "argument"}'
-        )
+        super().__init__(f'missing {"option" if parameter.is_option else "argument"}')
 
 
 option_re = compile("^-{1,2}[a-z]", IGNORECASE)

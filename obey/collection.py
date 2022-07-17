@@ -10,16 +10,16 @@ from .const import HELP_OPTIONS
 
 
 def get_main_option_name(arg: Parameter) -> Optional[str]:
-    if len(arg.original_name) == 1:
+    if len(arg.name) == 1:
         return None
 
-    return "--" + arg.original_name.replace("_", "-")
+    return "--" + arg.name.replace("_", "-")
 
 
 def get_short_options(arg: Parameter) -> list[str]:
     return [
-        "-" + arg.original_name[0],
-        "-" + arg.original_name[0].capitalize(),
+        "-" + arg.name[0],
+        "-" + arg.name[0].capitalize(),
     ]
 
 
@@ -46,7 +46,7 @@ class Collection:
         self.help_messages_for_parameters[arg_name] = help_message
 
     def get_help_message_for_parameter(self, arg: Parameter) -> str:
-        return self.help_messages_for_parameters.get(arg.original_name, "")
+        return self.help_messages_for_parameters.get(arg.name, "")
 
     def add_fn(self, fn: Callable) -> None:
         self.functions.append(Function(fn))

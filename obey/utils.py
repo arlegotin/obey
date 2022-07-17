@@ -8,7 +8,7 @@ PRIMITIVE_TYPES = [str, int, float, complex, bool]
 name_re = compile("^[A-Z]", IGNORECASE)
 
 
-def name_is_valid(name: str) -> bool:
+def arg_name_is_valid(name: str) -> bool:
     return bool(match(name_re, name))
 
 
@@ -16,7 +16,7 @@ def get_underlying_types(its_type: Any) -> list[Any]:
     """
     Ruturns types which constitutes given type
     """
-    its_type, _ = decompose_optional(its_type)
+    # its_type, _ = decompose_optional(its_type)
 
     if its_type in PRIMITIVE_TYPES:
         return [its_type]
@@ -36,7 +36,7 @@ def type_is_valid(its_type: Any) -> bool:
     """
     Returns True if type is valid and False if not
     """
-    its_type, _ = decompose_optional(its_type)
+    # its_type, _ = decompose_optional(its_type)
 
     if its_type in PRIMITIVE_TYPES:
         return True

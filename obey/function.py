@@ -7,7 +7,7 @@ from .context import Context
 from sys import stdout
 from warnings import warn
 from inspect import cleandoc
-from .const import NO_DEFAUL_VALUE
+from .const import NO_VALUE
 
 
 class Function:
@@ -36,9 +36,7 @@ class Function:
 
         # Retrieve function argument defaults and pad non-defaults
         defaults = [] if spec.defaults is None else [*spec.defaults]
-        defaults = [NO_DEFAUL_VALUE] * (
-            len(names) - len(defaults)
-        ) + defaults
+        defaults = [NO_VALUE] * (len(names) - len(defaults)) + defaults
 
         # Create Argument instances for each function argument
         parameters = []
@@ -63,7 +61,7 @@ class Function:
         for arg in self.parameters:
             arg.validate_value()
 
-        kwargs = {arg.original_name: arg.value for arg in self.parameters}
+        kwargs = {arg.name: arg.value for arg in self.parameters}
 
         result = self.fn(**kwargs)
 

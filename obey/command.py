@@ -13,6 +13,7 @@ class Command:
     Handles execution process.
     Contains a root Group instance and reflects it's public interface.
     """
+
     def __init__(self, auto_run: bool = False):
         self.group = Group(name=basename(sys.argv[0]))
 
@@ -29,7 +30,7 @@ class Command:
         Executes commands with sys.argv and prints out the results
         """
         returned_values = self.execute(sys.argv[1:])
-            
+
         for x in returned_values:
             print(x)
 

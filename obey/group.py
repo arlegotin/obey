@@ -61,7 +61,9 @@ class Group:
 
             raise RuntimeError(f'unknown command "{command_name}"')
 
-    def execute_collection(self, collection: Collection, command_line_parameters: list[str]) -> list[Any]:
+    def execute_collection(
+        self, collection: Collection, command_line_parameters: list[str]
+    ) -> list[Any]:
         combined_collection = self.shared_collection + collection
 
         if help_called():
