@@ -12,9 +12,7 @@ from .const import NO_VALUE
 
 
 class Parameter:
-    def __init__(
-        self, fn_name: str, name: str, its_type: Any, default: Any = NO_VALUE
-    ):
+    def __init__(self, fn_name: str, name: str, its_type: Any, default: Any = NO_VALUE):
         if not arg_name_is_valid(name):
             raise NameError(f'invalid argument name "{name}" of "{fn_name}"')
 

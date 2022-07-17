@@ -1,13 +1,13 @@
 """
-Contains Option type.
+Contains Argument type.
 
 Current realization is a workaround which allows to write:
 
-def main(x: Option[int]):
+def main(x: Arg[int]):
     assert type(x) == int
 
 where x is recognized as an int in function body,
-wherein Obey detects x as an Option.
+wherein Obey detects x as an Argument.
 
 Probably I should dig deeper into metaclasses and types
 and make this part more elegant.
@@ -19,12 +19,12 @@ from typing import TypeVar
 T = TypeVar("T")
 
 
-class OptionMeta(type):
-    TYPE: str = "2d5e1b80700aa5f7feee626bec13643667af0f0f37099909ad8456c43d93a469"
+class ArgMeta(type):
+    TYPE: str = "216cbebbe29885ad4a0bf8bfe79d9d7f1fe1e186264c1f1f6d6ce6b111403a0f"
 
     def __getitem__(self, underlying_type: T) -> T:
         return (underlying_type, self.TYPE)  # type: ignore
 
 
-class Option(metaclass=OptionMeta):
+class Arg(metaclass=ArgMeta):
     pass

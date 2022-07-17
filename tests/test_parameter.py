@@ -3,6 +3,7 @@ from obey.const import NO_VALUE
 import pytest
 from math import inf
 
+
 @pytest.fixture
 def fn_name():
     return "some_function"
@@ -21,10 +22,26 @@ def strings():
 @pytest.fixture
 def primitives():
     return [
-        (str, ["hello", "Goodbye", "good morning", "BIG", "", "2022", "-1.4142"], ["Sunday", "short", "", "-6", "London", "New-York"]),
+        (
+            str,
+            ["hello", "Goodbye", "good morning", "BIG", "", "2022", "-1.4142"],
+            ["Sunday", "short", "", "-6", "London", "New-York"],
+        ),
         (int, [-1, 0, 9, 102, 88914, 4e3], [-2000, 0, 33, 64, 2e2]),
-        (float, [-1.618, -1, 0, 0.618, 2.718, 314.15, 10012], [-.004, 5.6, 10, 111]),
-        (complex, [-1, 0, 1.6, complex("1"), complex("1j"), complex(".5-4j"), complex("5+0.4j")], [complex("-3"), 1, 10, complex("-9.3+4.57j")]),
+        (float, [-1.618, -1, 0, 0.618, 2.718, 314.15, 10012], [-0.004, 5.6, 10, 111]),
+        (
+            complex,
+            [
+                -1,
+                0,
+                1.6,
+                complex("1"),
+                complex("1j"),
+                complex(".5-4j"),
+                complex("5+0.4j"),
+            ],
+            [complex("-3"), 1, 10, complex("-9.3+4.57j")],
+        ),
     ]
 
 
@@ -122,6 +139,7 @@ def test_bool_argument(fn_name, name):
 
         param.reset_value()
 
+
 def test_bool_option(fn_name, name):
     for dv in [False, True]:
         param = Parameter(fn_name, name, bool, dv)
@@ -162,5 +180,5 @@ def test_list(fn_name, name, primitives):
                 assert param.can_be_filled
 
                 param.fill_value(value)
-                assert param.value == values[:i+1]
+                assert param.value == values[: i + 1]
                 assert param.can_be_filled
