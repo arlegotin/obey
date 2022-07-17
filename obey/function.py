@@ -2,7 +2,7 @@ from functools import cached_property
 from typing import Callable, Any
 from types import GeneratorType
 from inspect import getfullargspec
-from .argument import Argument
+from .parameter import Parameter
 from .context import Context
 from sys import stdout
 from warnings import warn
@@ -26,7 +26,7 @@ class Function:
         return self.fn.__name__
 
     @cached_property
-    def arguments(self) -> list[Argument]:
+    def parameters(self) -> list[Parameter]:
         # Get function specifications
         spec = getfullargspec(self.fn)
         # print(spec)
@@ -41,7 +41,7 @@ class Function:
         ) + defaults
 
         # Create Argument instances for each function argument
-        arguments = []
+        parameters = []
 
         for (name, default) in zip(names, defaults):
             if name in spec.annotations:
@@ -53,17 +53,17 @@ class Function:
                 #     f'No type specified for argument "{name}" of "{self.name}". It will be interpreted as string'
                 # )
 
-            variable = Argument(self.name, name, its_type, default)
+            variable = Parameter(self.name, name, its_type, default)
 
-            arguments.append(variable)
+            parameters.append(variable)
 
-        return arguments
+        return parameters
 
     def execute(self) -> Any:
-        for arg in self.arguments:
+        for arg in self.parameters:
             arg.validate_value()
 
-        kwargs = {arg.original_name: arg.value for arg in self.arguments}
+        kwargs = {arg.original_name: arg.value for arg in self.parameters}
 
         result = self.fn(**kwargs)
 
@@ -74,8 +74,8 @@ class Function:
 
     @cached_property
     def has_options(self) -> bool:
-        return any([arg.is_option for arg in self.arguments])
+        return any([arg.is_option for arg in self.parameters])
 
     @cached_property
     def has_positionals(self) -> bool:
-        return any([not arg.is_option for arg in self.arguments])
+        return any([not arg.is_option for arg in self.parameters])

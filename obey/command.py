@@ -33,9 +33,9 @@ class Command:
         for x in returned_values:
             print(x)
 
-    def execute(self, command_line_arguments: list[str]) -> list[Any]:
+    def execute(self, command_line_parameters: list[str]) -> list[Any]:
         try:
-            return self.group.execute(command_line_arguments)
+            return self.group.execute(command_line_parameters)
         except Exception as e:
             return [
                 f"Error: {e}",

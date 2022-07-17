@@ -61,7 +61,7 @@ def test_empty():
     assert not fn.has_options
     assert not fn.has_positionals
 
-    assert len(fn.arguments) == 0
+    assert len(fn.parameters) == 0
 
 
 def test_names():
@@ -69,7 +69,7 @@ def test_names():
 
     assert fn.name == "one_required_positional"
 
-    arg = fn.arguments[0]
+    arg = fn.parameters[0]
 
     assert arg.fn_name == "one_required_positional"
     assert arg.original_name == "count"
@@ -81,9 +81,9 @@ def test_one_unspecified():
     assert not fn.has_options
     assert fn.has_positionals
 
-    assert len(fn.arguments) == 1
+    assert len(fn.parameters) == 1
 
-    arg = fn.arguments[0]
+    arg = fn.parameters[0]
 
     assert arg.original_type == str
 
@@ -100,9 +100,9 @@ def test_one_required_positional():
     assert not fn.has_options
     assert fn.has_positionals
 
-    assert len(fn.arguments) == 1
+    assert len(fn.parameters) == 1
 
-    arg = fn.arguments[0]
+    arg = fn.parameters[0]
 
     assert arg.original_type == int
     assert not arg.has_default
@@ -129,9 +129,9 @@ def test_one_positional():
     assert not fn.has_options
     assert fn.has_positionals
 
-    assert len(fn.arguments) == 1
+    assert len(fn.parameters) == 1
 
-    arg = fn.arguments[0]
+    arg = fn.parameters[0]
 
     assert arg.original_type == float
     assert arg.has_default
@@ -156,9 +156,9 @@ def test_one_required_optional():
     assert fn.has_options
     assert not fn.has_positionals
 
-    assert len(fn.arguments) == 1
+    assert len(fn.parameters) == 1
 
-    arg = fn.arguments[0]
+    arg = fn.parameters[0]
 
     assert arg.original_type == str
     assert not arg.has_default
@@ -185,9 +185,9 @@ def test_one_optional():
     assert fn.has_options
     assert not fn.has_positionals
 
-    assert len(fn.arguments) == 1
+    assert len(fn.parameters) == 1
 
-    arg = fn.arguments[0]
+    arg = fn.parameters[0]
 
     assert arg.original_type == complex
     assert arg.has_default
@@ -212,9 +212,9 @@ def test_one_literal():
     assert not fn.has_options
     assert fn.has_positionals
 
-    assert len(fn.arguments) == 1
+    assert len(fn.parameters) == 1
 
-    arg = fn.arguments[0]
+    arg = fn.parameters[0]
 
     assert arg.original_type == Literal["on", "off"]
     assert not arg.has_default
@@ -242,9 +242,9 @@ def test_one_tuple():
     assert not fn.has_options
     assert fn.has_positionals
 
-    assert len(fn.arguments) == 1
+    assert len(fn.parameters) == 1
 
-    arg = fn.arguments[0]
+    arg = fn.parameters[0]
 
     assert arg.original_type == tuple[float, float, float]
     assert arg.has_default
@@ -281,9 +281,9 @@ def test_one_optional_list():
     assert fn.has_options
     assert not fn.has_positionals
 
-    assert len(fn.arguments) == 1
+    assert len(fn.parameters) == 1
 
-    arg = fn.arguments[0]
+    arg = fn.parameters[0]
 
     assert arg.original_type == list[str]
     assert not arg.has_default
@@ -319,9 +319,9 @@ def test_one_positional_list():
     assert not fn.has_options
     assert fn.has_positionals
 
-    assert len(fn.arguments) == 1
+    assert len(fn.parameters) == 1
 
-    arg = fn.arguments[0]
+    arg = fn.parameters[0]
 
     assert arg.original_type == list[str]
     assert not arg.has_default
@@ -357,9 +357,9 @@ def test_mixed():
     assert fn.has_options
     assert fn.has_positionals
 
-    assert len(fn.arguments) == 6
+    assert len(fn.parameters) == 6
 
-    value, name, debug, modes, count, z = fn.arguments
+    value, name, debug, modes, count, z = fn.parameters
 
     assert value.original_type == float
     assert not value.has_default

@@ -11,7 +11,7 @@ from .utils import (
 from .const import PLACEHOLDER_FOR_DEFAUL_VALUE
 
 
-class Argument:
+class Parameter:
     def __init__(
         self, fn_name: str, name: str, its_type: Any, default: Optional[Any] = None
     ):
@@ -22,7 +22,7 @@ class Argument:
         self.original_name = name
 
         if not type_is_valid(its_type):
-            raise ArgumentError(self, f'has invalid type "{its_type}"')
+            raise ParameterError(self, f'has invalid type "{its_type}"')
 
         self.original_type, self.is_option = decompose_optional(its_type)
         self.underlying_type = get_underlying_types(its_type)[0]
@@ -43,11 +43,11 @@ class Argument:
         try:
             value = self.underlying_type(value)
         except ValueError:
-            raise ArgumentError(self, f'cannot be casted from "{value}"')
+            raise ParameterError(self, f'cannot be casted from "{value}"')
 
         if self.is_literal:
             if value not in self.args_in_type:
-                raise ArgumentError(
+                raise ParameterError(
                     self, f'got "{value}", but should be {self.type_description}'
                 )
 
@@ -68,7 +68,7 @@ class Argument:
 
     def fill_value(self, value: Any) -> None:
         if not self.can_be_filled:
-            raise ArgumentError(self, f"already has a value")
+            raise ParameterError(self, f"already has a value")
 
         if self.expects_many_values:
             if self.filled_value is None:
@@ -81,11 +81,11 @@ class Argument:
 
     def validate_value(self) -> None:
         if not self.has_default and self.value is None:
-            raise ArgumentError(self, "is required")
+            raise ParameterError(self, "is required")
 
         if 1 < self.expected_values_count < inf:
             if len(self.value) != self.expected_values_count:
-                raise ArgumentError(
+                raise ParameterError(
                     self,
                     f"got {len(self.value)} values, but expects {self.expected_values_count}",
                 )
@@ -192,7 +192,7 @@ class Argument:
         return self.expected_values_count > 1
 
 
-class ArgumentError(Exception):
-    def __init__(self, arg: Argument, message: str):
+class ParameterError(Exception):
+    def __init__(self, arg: Parameter, message: str):
         prefix = f'{"option" if arg.is_option else "argument"} "{arg.original_name}" of "{arg.fn_name}"'
         super().__init__(f"{prefix} {message}")

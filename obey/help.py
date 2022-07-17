@@ -2,14 +2,14 @@ from tabulate import tabulate
 import sys
 from os.path import basename
 
-from .argument import Argument
+from .parameter import Parameter
 from .collection import Collection
 from .const import HELP_OPTIONS
 
 CALLED_SCRIPT_NAME = basename(sys.argv[0])
 
 
-def format_arg_name(arg: Argument) -> str:
+def format_arg_name(arg: Parameter) -> str:
     return f"<{arg.original_name}>"
 
 
@@ -48,8 +48,8 @@ def compose_collection_help(collection: Collection) -> str:
 
     help_lines: list[str] = []
 
-    positionals = [arg for arg in collection.arguments if not arg.is_option]
-    options = [arg for arg in collection.arguments if arg.is_option]
+    positionals = [arg for arg in collection.parameters if not arg.is_option]
+    options = [arg for arg in collection.parameters if arg.is_option]
 
     # Usage
     call_parts: list[str] = [CALLED_SCRIPT_NAME]
@@ -87,7 +87,7 @@ def compose_collection_help(collection: Collection) -> str:
 
         line_parts.append(arg.value_description)
 
-        line_parts.append(collection.get_help_message_for_argument(arg))
+        line_parts.append(collection.get_help_message_for_parameter(arg))
 
         argument_parts.append(line_parts)
 
@@ -104,7 +104,7 @@ def compose_collection_help(collection: Collection) -> str:
 
         line_parts.append(arg.value_description)
 
-        line_parts.append(collection.get_help_message_for_argument(arg))
+        line_parts.append(collection.get_help_message_for_parameter(arg))
 
         option_parts.append(line_parts)
 

@@ -1,15 +1,15 @@
 import pytest
-from obey.argument import Argument
+from obey.parameter import Parameter
 from obey.collection import Collection
 from typing import Optional, Literal, Union
 
 
-def map_to_keys(parsing_map: dict[Union[int, str], Argument]) -> list[Union[int, str]]:
+def map_to_keys(parsing_map: dict[Union[int, str], Parameter]) -> list[Union[int, str]]:
     return list(parsing_map.keys())
 
 
 def map_to_arg_names(
-    parsing_map: dict[Union[int, str], Argument]
+    parsing_map: dict[Union[int, str], Parameter]
 ) -> list[Union[int, str]]:
     return [arg.original_name for arg in parsing_map.values()]
 

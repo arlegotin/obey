@@ -1,5 +1,5 @@
 import pytest
-from obey.argument import Argument
+from obey.parameter import Parameter
 from obey.collection import Collection
 from obey.parser import Parser
 from typing import Optional, Literal, Union
@@ -114,7 +114,7 @@ def test_one_positional():
 
     parser.parse_tokens(["1"])
 
-    assert collection.arguments[0].value == 1
+    assert collection.parameters[0].value == 1
 
 
 def test_two_positionals():
@@ -137,8 +137,8 @@ def test_two_positionals():
     parser.parse_tokens(["2.5", "3.5"])
     collection.execute()
 
-    assert collection.arguments[0].value == 2.5
-    assert collection.arguments[1].value == 3.5
+    assert collection.parameters[0].value == 2.5
+    assert collection.parameters[1].value == 3.5
 
 
 def test_one_default_positional():
@@ -148,11 +148,11 @@ def test_one_default_positional():
 
     parser = Parser(parsing_map=collection.parsing_map)
 
-    assert collection.arguments[0].value == "hello"
+    assert collection.parameters[0].value == "hello"
 
     parser.parse_tokens(["bye"])
 
-    assert collection.arguments[0].value == "bye"
+    assert collection.parameters[0].value == "bye"
 
 
 def test_two_default_positional():
@@ -162,18 +162,18 @@ def test_two_default_positional():
 
     parser = Parser(parsing_map=collection.parsing_map)
 
-    assert collection.arguments[0].value == 0.5
-    assert collection.arguments[1].value == 0.7
+    assert collection.parameters[0].value == 0.5
+    assert collection.parameters[1].value == 0.7
 
     parser.parse_tokens([".1"])
 
-    assert collection.arguments[0].value == 0.1
-    assert collection.arguments[1].value == 0.7
+    assert collection.parameters[0].value == 0.1
+    assert collection.parameters[1].value == 0.7
 
     parser.parse_tokens([".3", "-.8"])
 
-    assert collection.arguments[0].value == 0.3
-    assert collection.arguments[1].value == -0.8
+    assert collection.parameters[0].value == 0.3
+    assert collection.parameters[1].value == -0.8
 
 
 def test_two_positionals_with_one_default():
@@ -183,8 +183,8 @@ def test_two_positionals_with_one_default():
 
     parser = Parser(parsing_map=collection.parsing_map)
 
-    assert collection.arguments[0].value == None
-    assert collection.arguments[1].value == "hello"
+    assert collection.parameters[0].value == None
+    assert collection.parameters[1].value == "hello"
 
     parser.parse_tokens([])
 
@@ -194,14 +194,14 @@ def test_two_positionals_with_one_default():
     parser.parse_tokens([".99"])
     collection.execute()
 
-    assert collection.arguments[0].value == 0.99
-    assert collection.arguments[1].value == "hello"
+    assert collection.parameters[0].value == 0.99
+    assert collection.parameters[1].value == "hello"
 
     parser.parse_tokens([".99", "bye"])
     collection.execute()
 
-    assert collection.arguments[0].value == 0.99
-    assert collection.arguments[1].value == "bye"
+    assert collection.parameters[0].value == 0.99
+    assert collection.parameters[1].value == "bye"
 
 
 def test_one_option():
@@ -229,14 +229,14 @@ def test_one_option():
         parser.parse_tokens(tokens)
         collection.execute()
 
-        assert collection.arguments[0].value == 2
+        assert collection.parameters[0].value == 2
 
     for tokens in [["-a", "-3"], ["--age", "-3.0"], ["-a", "-3."]]:
 
         parser.parse_tokens(tokens)
         collection.execute()
 
-        assert collection.arguments[0].value == -3
+        assert collection.parameters[0].value == -3
 
 
 def test_two_options():
@@ -270,8 +270,8 @@ def test_two_options():
 
         parser.parse_tokens(tokens)
 
-        assert collection.arguments[0].value == "Brian"
-        assert collection.arguments[1].value == 176
+        assert collection.parameters[0].value == "Brian"
+        assert collection.parameters[1].value == 176
 
 
 def test_two_options_with_one_default():
@@ -298,8 +298,8 @@ def test_two_options_with_one_default():
 
         parser.parse_tokens(tokens)
 
-        assert collection.arguments[0].value == "image.png"
-        assert collection.arguments[1].value == 128
+        assert collection.parameters[0].value == "image.png"
+        assert collection.parameters[1].value == 128
 
     for tokens in [
         ["-f", "image.png", "-s", "32"],
@@ -310,8 +310,8 @@ def test_two_options_with_one_default():
 
         parser.parse_tokens(tokens)
 
-        assert collection.arguments[0].value == "image.png"
-        assert collection.arguments[1].value == 32
+        assert collection.parameters[0].value == "image.png"
+        assert collection.parameters[1].value == 32
 
 
 def test_positional_and_two_options_with_default():
@@ -337,10 +337,10 @@ def test_positional_and_two_options_with_default():
 
         parser.parse_tokens(tokens)
 
-        assert collection.arguments[0].value == "London"
-        assert collection.arguments[1].value == 300
-        assert collection.arguments[2].value == 99
-        assert collection.arguments[3].value == 50
+        assert collection.parameters[0].value == "London"
+        assert collection.parameters[1].value == 300
+        assert collection.parameters[2].value == 99
+        assert collection.parameters[3].value == 50
 
     for tokens in [
         ["Canberra", "101", "-p", "600", "-d", "25"],
@@ -351,10 +351,10 @@ def test_positional_and_two_options_with_default():
 
         parser.parse_tokens(tokens)
 
-        assert collection.arguments[0].value == "Canberra"
-        assert collection.arguments[1].value == 600
-        assert collection.arguments[2].value == 101
-        assert collection.arguments[3].value == 25
+        assert collection.parameters[0].value == "Canberra"
+        assert collection.parameters[1].value == 600
+        assert collection.parameters[2].value == 101
+        assert collection.parameters[3].value == 25
 
 
 def test_combination_1():
@@ -372,10 +372,10 @@ def test_combination_1():
 
         parser.parse_tokens(tokens)
 
-        assert collection.arguments[0].value == "video.mp4"
-        assert collection.arguments[1].value == 128
-        assert collection.arguments[2].value == 2.2
-        assert collection.arguments[3].value == "hello"
+        assert collection.parameters[0].value == "video.mp4"
+        assert collection.parameters[1].value == 128
+        assert collection.parameters[2].value == 2.2
+        assert collection.parameters[3].value == "hello"
 
     for tokens in [
         ["-f", "video.mp4", "2.2", "-s", "10", "bye"],
@@ -384,10 +384,10 @@ def test_combination_1():
 
         parser.parse_tokens(tokens)
 
-        assert collection.arguments[0].value == "video.mp4"
-        assert collection.arguments[1].value == 10
-        assert collection.arguments[2].value == 2.2
-        assert collection.arguments[3].value == "bye"
+        assert collection.parameters[0].value == "video.mp4"
+        assert collection.parameters[1].value == 10
+        assert collection.parameters[2].value == 2.2
+        assert collection.parameters[3].value == "bye"
 
 
 def test_quotes():
@@ -399,7 +399,7 @@ def test_quotes():
 
     parser.parse_tokens(["two words"])
 
-    assert collection.arguments[0].value == "two words"
+    assert collection.parameters[0].value == "two words"
 
 
 def test_positional_list():
@@ -416,7 +416,7 @@ def test_positional_list():
 
         parser.parse_tokens([str(x) for x in values])
 
-        assert collection.arguments[0].value == values
+        assert collection.parameters[0].value == values
 
 
 def test_positional_list_before_another_positional():
@@ -441,8 +441,8 @@ def test_positional_list_after_another_positional():
 
         parser.parse_tokens(["20"] + [str(x) for x in values])
 
-        assert collection.arguments[0].value == 20
-        assert collection.arguments[1].value == values
+        assert collection.parameters[0].value == 20
+        assert collection.parameters[1].value == values
 
 
 def test_positional_tuple():
@@ -468,7 +468,7 @@ def test_positional_tuple():
         collection.execute()
 
     parser.parse_tokens([".2", ".3", ".4"])
-    assert collection.arguments[0].value == [0.2, 0.3, 0.4]
+    assert collection.parameters[0].value == [0.2, 0.3, 0.4]
 
 
 def test_option_list():
@@ -487,16 +487,16 @@ def test_option_list():
         parser.parse_tokens([".1", "1.", ".0001"])
 
     parser.parse_tokens(["-v", ".1", "1."])
-    assert collection.arguments[0].value == [0.1, 1.0]
+    assert collection.parameters[0].value == [0.1, 1.0]
 
     parser.parse_tokens(["-v", ".1", "1.", ".0001"])
-    assert collection.arguments[0].value == [0.1, 1.0, 0.0001]
+    assert collection.parameters[0].value == [0.1, 1.0, 0.0001]
 
     parser.parse_tokens(["-v", ".1", "1.", ".0001", "999.08"])
-    assert collection.arguments[0].value == [0.1, 1.0, 0.0001, 999.08]
+    assert collection.parameters[0].value == [0.1, 1.0, 0.0001, 999.08]
 
     parser.parse_tokens(["-v", "1", "-v", "2", "-v", "3"])
-    assert collection.arguments[0].value == [1, 2, 3]
+    assert collection.parameters[0].value == [1, 2, 3]
 
 
 def test_option_tuple():
@@ -520,10 +520,10 @@ def test_option_tuple():
         collection.execute()
 
     parser.parse_tokens(["-c", "5.5", ".77"])
-    assert collection.arguments[0].value == [5.5, 0.77]
+    assert collection.parameters[0].value == [5.5, 0.77]
 
     parser.parse_tokens(["--coords2d", "2", "4"])
-    assert collection.arguments[0].value == [2, 4]
+    assert collection.parameters[0].value == [2, 4]
 
 
 def test_positional_and_option():
@@ -557,8 +557,8 @@ def test_positional_and_option():
         parser.parse_tokens(["-v", "Joe"])
 
     parser.parse_tokens(["Jane", "Joe", "-v", "1"])
-    assert collection.arguments[0].value == ["Jane", "Joe"]
-    assert collection.arguments[1].value == [1]
+    assert collection.parameters[0].value == ["Jane", "Joe"]
+    assert collection.parameters[1].value == [1]
 
     with pytest.raises(Exception):
         parser.parse_tokens(["Jane", "Joe", "--", "-v", "1"])
@@ -567,5 +567,5 @@ def test_positional_and_option():
         parser.parse_tokens(["-v", "1", "2", "Jane"])
 
     parser.parse_tokens(["-v", "1", "2", "--", "Jane"])
-    assert collection.arguments[0].value == ["Jane"]
-    assert collection.arguments[1].value == [1, 2]
+    assert collection.parameters[0].value == ["Jane"]
+    assert collection.parameters[1].value == [1, 2]

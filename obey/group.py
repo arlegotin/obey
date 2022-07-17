@@ -30,38 +30,38 @@ class Group:
         self.subgroups.append(group)
         return group
 
-    def execute(self, command_line_arguments: list[str]) -> list[Any]:
+    def execute(self, command_line_parameters: list[str]) -> list[Any]:
         has_collections_to_choose_from = len(self.collections) > 2
         has_subgroups_to_choose_from = len(self.subgroups) > 0
 
         if has_collections_to_choose_from or has_subgroups_to_choose_from:
-            return self.execute_one_of_many(command_line_arguments)
+            return self.execute_one_of_many(command_line_parameters)
         else:
-            return self.execute_collection(self.collections[0], command_line_arguments)
+            return self.execute_collection(self.collections[0], command_line_parameters)
 
-    def execute_one_of_many(self, command_line_arguments: list[str]) -> list[Any]:
+    def execute_one_of_many(self, command_line_parameters: list[str]) -> list[Any]:
         if help_called():
             raise RuntimeError(f"add subgroups to help")
             # return [
             #     compose_group_help(self.collections),
             # ]
         else:
-            if not command_line_arguments:
+            if not command_line_parameters:
                 raise RuntimeError(f"no command specified")
 
-            command_name = command_line_arguments.pop(0)
+            command_name = command_line_parameters.pop(0)
 
             for c in self.collections:
                 if c.name == command_name:
-                    return self.execute_collection(c, command_line_arguments)
+                    return self.execute_collection(c, command_line_parameters)
 
             for g in self.subgroups:
                 if g.name == command_name:
-                    return self.execute(command_line_arguments)
+                    return self.execute(command_line_parameters)
 
             raise RuntimeError(f'unknown command "{command_name}"')
 
-    def execute_collection(self, collection: Collection, command_line_arguments: list[str]) -> list[Any]:
+    def execute_collection(self, collection: Collection, command_line_parameters: list[str]) -> list[Any]:
         combined_collection = self.shared_collection + collection
 
         if help_called():
@@ -70,7 +70,7 @@ class Group:
             ]
         else:
             parser = Parser(parsing_map=combined_collection.parsing_map)
-            parser.parse_tokens(command_line_arguments)
+            parser.parse_tokens(command_line_parameters)
 
             return combined_collection.execute()
 
@@ -95,6 +95,6 @@ class Group:
         return fn
 
     def help(self, arg_name: str, help_message: str) -> Callable:
-        self.current_collection.add_argument_help(arg_name, help_message)
+        self.current_collection.add_parameter_help(arg_name, help_message)
 
         return lambda fn: fn
