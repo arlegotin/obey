@@ -37,7 +37,7 @@ class Command:
             else:
                 self.execute_collection(self.collections[0])
         except Exception as e:
-            print(e)
+            print(f"Error: {e}")
 
             if HELP_OPTIONS:
                 print(f"Use {', '.join(HELP_OPTIONS)} for help")
@@ -47,7 +47,7 @@ class Command:
             print(compose_group_help(self.collections))
         else:
             if len(sys.argv) < 2:
-                raise RuntimeError(f"No command specified")
+                raise RuntimeError(f"no command specified")
 
             command_name = sys.argv.pop(1)
 
@@ -56,7 +56,7 @@ class Command:
                     self.execute_collection(c)
                     return
 
-            raise RuntimeError(f'Unknown command "{command_name}"')
+            raise RuntimeError(f'unknown command "{command_name}"')
 
     def execute_collection(self, collection: Collection):
         combined_collection = self.shared_collection + collection

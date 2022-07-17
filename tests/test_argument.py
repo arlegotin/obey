@@ -69,6 +69,7 @@ def test_primitives():
                 assert arg.value == some_other_value
                 arg.validate_value()
 
+
 def test_bool():
     func_name = "some_func"
     arg_name = "some_arg"
@@ -85,7 +86,7 @@ def test_bool():
                     arg = Argument(func_name, arg_name, bool, True)
                     assert arg.has_default
                     assert arg.value == True
-                
+
                 arg.validate_value()
             else:
                 if is_option:

@@ -6,18 +6,18 @@ from re import compile, IGNORECASE, match
 
 class UnexpectedOption(Exception):
     def __init__(self, token: str):
-        super().__init__(f'Unexpected option "{token}"')
+        super().__init__(f'unexpected option "{token}"')
 
 
 class UnexpectedPositional(Exception):
     def __init__(self, token: str):
-        super().__init__(f'Unexpected positional "{token}"')
+        super().__init__(f'unexpected positional "{token}"')
 
 
 class MissingArgument(Exception):
     def __init__(self, argument: Argument):
         super().__init__(
-            f'Missing {"positional argument" if not argument.is_option else "option"} {", ".join(argument.option_names)}'
+            f'missing {"positional argument" if not argument.is_option else "option"} {", ".join(argument.option_names)}'
         )
 
 

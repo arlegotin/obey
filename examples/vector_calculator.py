@@ -21,7 +21,7 @@ def norm(
     elif norm == "max":
         return max([abs(x) for x in coords])
 
-    raise ValueError(f'Unknown norm "{norm}"')
+    raise ValueError(f'unknown norm "{norm}"')
 
 
 @command
@@ -30,7 +30,7 @@ def dot_product(a: Optional[list[float]], b: Optional[list[float]]):
     Calculates dot-product of two vectors
     """
     if len(a) != len(b):
-        raise ValueError(f"Vectors should have same dimensions")
+        raise ValueError(f"vectors should have same dimensions")
 
     return sum([x * y for x, y in zip(a, b)])
 

@@ -7,6 +7,6 @@ class Context:
 
     def __getattr__(self, name) -> Any:
         if name not in self.__dict__:
-            raise AttributeError(f'Context has no attribute "{name}"')
+            raise AttributeError(f'context has no attribute "{name}"')
 
         return self.attrs[name]

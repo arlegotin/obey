@@ -16,7 +16,7 @@ class Argument:
         self, fn_name: str, name: str, its_type: Any, default: Optional[Any] = None
     ):
         if not name_is_valid(name):
-            raise NameError(f'Invalid argument name "{name}" of "{fn_name}"')
+            raise NameError(f'invalid argument name "{name}" of "{fn_name}"')
 
         self.fn_name = fn_name
         self.original_name = name
@@ -194,5 +194,5 @@ class Argument:
 
 class ArgumentError(Exception):
     def __init__(self, arg: Argument, message: str):
-        prefix = f'{"Option" if arg.is_option else "Argument"} "{arg.original_name}" of "{arg.fn_name}"'
+        prefix = f'{"option" if arg.is_option else "argument"} "{arg.original_name}" of "{arg.fn_name}"'
         super().__init__(f"{prefix} {message}")
