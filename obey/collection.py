@@ -136,10 +136,6 @@ class Collection:
     def __bool__(self) -> bool:
         return len(self.functions) > 0
 
-    @staticmethod
-    def format_arg_name(arg: Argument) -> str:
-        return f"<{arg.original_name}>"
-
     @property
     def doc_lines(self) -> list[str]:
         return list(filter(len, [fn.doc for fn in self.functions]))

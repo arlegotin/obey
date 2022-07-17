@@ -2,10 +2,15 @@ from tabulate import tabulate
 import sys
 from os.path import basename
 
+from .argument import Argument
 from .collection import Collection
 from .const import HELP_OPTIONS
 
 CALLED_SCRIPT_NAME = basename(sys.argv[0])
+
+
+def format_arg_name(arg: Argument) -> str:
+    return f"<{arg.original_name}>"
 
 
 def format_table(rows: list[list[str]]) -> str:
@@ -54,13 +59,13 @@ def compose_collection_help(collection: Collection) -> str:
 
     required = [arg for arg in positionals if not arg.has_default]
     for arg in required:
-        call_parts.append(collection.format_arg_name(arg))
+        call_parts.append(format_arg_name(arg))
 
     not_required = [arg for arg in positionals if arg.has_default]
     if not_required:
         not_required_part = (
             "["
-            + " [".join([collection.format_arg_name(arg) for arg in not_required])
+            + " [".join([format_arg_name(arg) for arg in not_required])
             + "]" * len(not_required)
         )
         call_parts.append(not_required_part)
@@ -76,7 +81,7 @@ def compose_collection_help(collection: Collection) -> str:
     argument_parts: list[list[str]] = []
     for arg in positionals:
         line_parts = [
-            collection.format_arg_name(arg),
+            format_arg_name(arg),
             arg.type_description,
         ]
 

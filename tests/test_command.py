@@ -6,8 +6,8 @@ def test_empty():
     command = Command()
 
     assert not command.auto_run
-    assert not command.collections
-    assert command.shared_collection.parsing_map.keys() == {}.keys()
+    assert not command.group.collections[0]
+    assert command.group.shared_collection.parsing_map.keys() == {}.keys()
 
 
 def test_empty_fn():
@@ -17,13 +17,13 @@ def test_empty_fn():
     def empty_1():
         pass
 
-    assert len(command.collections) == 2
+    assert len(command.group.collections) == 2
 
     @command
     def empty_2():
         pass
 
-    assert len(command.collections) == 3
+    assert len(command.group.collections) == 3
 
 
 def test_positional_fn():
@@ -33,7 +33,7 @@ def test_positional_fn():
     def pos(count: int):
         pass
 
-    assert command.collections[0].parsing_map.keys() == {0: None}.keys()
+    assert command.group.collections[0].parsing_map.keys() == {0: None}.keys()
 
 
 def test_option_fn():
@@ -44,7 +44,7 @@ def test_option_fn():
         pass
 
     assert (
-        command.collections[0].parsing_map.keys()
+        command.group.collections[0].parsing_map.keys()
         == {
             "-c": None,
             "--count": None,
@@ -64,7 +64,7 @@ def test_for_next():
         pass
 
     assert (
-        command.collections[0].parsing_map.keys()
+        command.group.collections[0].parsing_map.keys()
         == {
             0: None,
             "-v": None,
