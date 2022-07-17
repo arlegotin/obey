@@ -1,4 +1,5 @@
 from obey.function import Function
+from obey.const import NO_DEFAUL_VALUE
 import pytest
 from typing import Optional, Literal
 from math import inf
@@ -106,7 +107,6 @@ def test_one_required_positional():
 
     assert arg.original_type == int
     assert not arg.has_default
-    assert arg.value is None
     assert not arg.is_option
     assert arg.underlying_type == int
     assert not arg.is_bool
@@ -162,7 +162,6 @@ def test_one_required_optional():
 
     assert arg.original_type == str
     assert not arg.has_default
-    assert arg.value is None
     assert arg.is_option
     assert arg.underlying_type == str
     assert not arg.is_bool
@@ -218,7 +217,6 @@ def test_one_literal():
 
     assert arg.original_type == Literal["on", "off"]
     assert not arg.has_default
-    assert arg.value is None
     assert not arg.is_option
     assert arg.underlying_type == str
     assert not arg.is_bool
@@ -287,7 +285,6 @@ def test_one_optional_list():
 
     assert arg.original_type == list[str]
     assert not arg.has_default
-    assert arg.value == None
     assert arg.is_option
     assert arg.underlying_type == str
     assert not arg.is_bool
@@ -325,7 +322,6 @@ def test_one_positional_list():
 
     assert arg.original_type == list[str]
     assert not arg.has_default
-    assert arg.value == None
     assert not arg.is_option
     assert arg.underlying_type == str
     assert not arg.is_bool
@@ -363,7 +359,6 @@ def test_mixed():
 
     assert value.original_type == float
     assert not value.has_default
-    assert value.value is None
     assert not value.is_option
     assert value.underlying_type == float
     assert not value.is_bool
@@ -375,7 +370,6 @@ def test_mixed():
 
     assert name.original_type == str
     assert not name.has_default
-    assert name.value is None
     assert name.is_option
     assert name.underlying_type == str
     assert not name.is_bool
@@ -387,7 +381,6 @@ def test_mixed():
 
     assert debug.original_type == bool
     assert not debug.has_default
-    assert debug.value is None
     assert not debug.is_option
     assert debug.underlying_type == bool
     assert debug.is_bool
@@ -399,7 +392,6 @@ def test_mixed():
 
     assert modes.original_type == Literal["yes", "no"]
     assert not modes.has_default
-    assert modes.value is None
     assert modes.is_option
     assert modes.underlying_type == str
     assert not modes.is_bool

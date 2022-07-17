@@ -2,6 +2,7 @@ import pytest
 from obey.parameter import Parameter
 from obey.collection import Collection
 from obey.parser import Parser
+from obey.const import NO_DEFAUL_VALUE
 from typing import Optional, Literal, Union
 
 
@@ -183,7 +184,7 @@ def test_two_positionals_with_one_default():
 
     parser = Parser(parsing_map=collection.parsing_map)
 
-    assert collection.parameters[0].value == None
+    assert collection.parameters[0].value == NO_DEFAUL_VALUE
     assert collection.parameters[1].value == "hello"
 
     parser.parse_tokens([])

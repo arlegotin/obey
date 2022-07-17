@@ -8,12 +8,12 @@ from .utils import (
     get_underlying_types,
     name_is_valid,
 )
-from .const import PLACEHOLDER_FOR_DEFAUL_VALUE
+from .const import NO_DEFAUL_VALUE
 
 
 class Parameter:
     def __init__(
-        self, fn_name: str, name: str, its_type: Any, default: Optional[Any] = None
+        self, fn_name: str, name: str, its_type: Any, default: Any = NO_DEFAUL_VALUE
     ):
         if not name_is_valid(name):
             raise NameError(f'invalid argument name "{name}" of "{fn_name}"')
@@ -26,9 +26,6 @@ class Parameter:
 
         self.original_type, self.is_option = decompose_optional(its_type)
         self.underlying_type = get_underlying_types(its_type)[0]
-
-        if default == PLACEHOLDER_FOR_DEFAUL_VALUE:
-            default = None
 
         if self.original_type is bool and self.is_option:
             default = False
@@ -80,7 +77,7 @@ class Parameter:
             self.filled_value = self.cast(value)
 
     def validate_value(self) -> None:
-        if not self.has_default and self.value is None:
+        if not self.has_default and self.value is NO_DEFAUL_VALUE: 
             raise ParameterError(self, "is required")
 
         if 1 < self.expected_values_count < inf:
@@ -98,7 +95,7 @@ class Parameter:
         if self.has_default:
             return self.default
 
-        return None
+        return NO_DEFAUL_VALUE
 
     def __repr__(self) -> str:
         parts = []
@@ -147,7 +144,7 @@ class Parameter:
 
     @cached_property
     def has_default(self) -> bool:
-        return self.default is not None
+        return self.default is not NO_DEFAUL_VALUE
 
     @cached_property
     def type_description(self) -> str:

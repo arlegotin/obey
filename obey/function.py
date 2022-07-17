@@ -7,7 +7,7 @@ from .context import Context
 from sys import stdout
 from warnings import warn
 from inspect import cleandoc
-from .const import PLACEHOLDER_FOR_DEFAUL_VALUE
+from .const import NO_DEFAUL_VALUE
 
 
 class Function:
@@ -36,7 +36,7 @@ class Function:
 
         # Retrieve function argument defaults and pad non-defaults
         defaults = [] if spec.defaults is None else [*spec.defaults]
-        defaults = [PLACEHOLDER_FOR_DEFAUL_VALUE] * (
+        defaults = [NO_DEFAUL_VALUE] * (
             len(names) - len(defaults)
         ) + defaults
 

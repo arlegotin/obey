@@ -1,15 +1,15 @@
 from obey.parameter import Parameter
-from obey.const import PLACEHOLDER_FOR_DEFAUL_VALUE
+from obey.const import NO_DEFAUL_VALUE
 import pytest
 from typing import Optional, Literal, Callable
 from math import inf
 
 
 def test_default_placeholder():
-    arg = Parameter("some_func", "some_arg", int, PLACEHOLDER_FOR_DEFAUL_VALUE)
+    arg = Parameter("some_func", "some_arg", int, NO_DEFAUL_VALUE)
 
     assert not arg.has_default
-    assert arg.value is None
+    assert arg.value is NO_DEFAUL_VALUE
 
 
 def test_primitives():
@@ -39,7 +39,7 @@ def test_primitives():
                     else:
                         arg = Parameter(func_name, arg_name, arg_type)
 
-                    assert arg.value is None
+                    assert arg.value is NO_DEFAUL_VALUE
 
                     with pytest.raises(Exception):
                         arg.validate_value()
@@ -97,7 +97,7 @@ def test_bool():
                 else:
                     arg = Parameter(func_name, arg_name, bool)
                     assert not arg.has_default
-                    assert arg.value is None
+                    assert arg.value is NO_DEFAUL_VALUE
 
                     with pytest.raises(Exception):
                         arg.validate_value()
@@ -226,7 +226,7 @@ def test_tuple():
                         else:
                             arg = Parameter(func_name, arg_name, original_tuple)
 
-                        assert arg.value is None
+                        assert arg.value is NO_DEFAUL_VALUE
 
                         with pytest.raises(Exception):
                             arg.validate_value()
@@ -364,7 +364,7 @@ def test_invalid():
 def test_filling():
     arg = Parameter("some_func", "some_arg", int)
 
-    assert arg.value is None
+    assert arg.value is NO_DEFAUL_VALUE
     assert arg.can_be_filled
 
     arg.fill_value(1)
@@ -376,7 +376,7 @@ def test_filling():
 
     arg.reset_value()
 
-    assert arg.value is None
+    assert arg.value is NO_DEFAUL_VALUE
     assert arg.can_be_filled
 
     arg.fill_value(2)
